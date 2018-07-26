@@ -17,7 +17,7 @@
         <div class="form-group">
             <h1>Todo-List Gits</h1>
             <input type="text" class="form-control" name="todo" id="todo" placeholder="todo..." v-model="todo" @keyup.enter="addTodo">
-            <button class="btn btn-primary" @click="addTodo(todo)" style="margin-top: 8px;">Add</button>
+            <button class="btn btn-primary" @click="addTodo()" style="margin-top: 8px;">Add</button>
         </div>
 
         <table class="table" v-if="todos.length > 0">
@@ -48,6 +48,7 @@
             data() {
                 return {
                     todos: [],
+                    todo: ""
                 }
             },
             created() {
@@ -79,5 +80,4 @@
         })
     </script>
 </body>
-
 </html>

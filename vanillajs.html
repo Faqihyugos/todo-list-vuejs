@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B"
+        crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container">
+        <div class="form-group">
+            <h1>Vanilla Todo List</h1>
+            <input type="text" class="form-control" id="todoInput">
+            <button class="btn btn-primary" onclick="addDocument()" style="margin-top: 8px;">Add</button>
+        </div>
+        <table class="table" id="tab" v-if="todos.length > 0">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Todo</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody id="tablebody">
+            </tbody>
+        </table </div>
+
+        <script>
+            let todolist = []
+            if (loadFromLocalStorage() != null) {
+                todolist = loadFromLocalStorage();
+                console.log(todolist);
+                refreshTable();
+            }
+
+            document.getElementById("todoInput").addEventListener("keyup", function (event) {
+                if (event.code == "Enter") {
+                    addDocument();
+                }
+            })
+
+            function addDocument() {
+                todolist.push(document.getElementById("todoInput").value);
+                console.log(todolist);
+                saveToLocalStorate(todolist);
+                refreshTable();
+            }
+
+            function removeDocument(i) {
+                console.log("clicked")
+                todolist.splice(i, 1);
+                saveToLocalStorate(todolist);
+                refreshTable();
+            }
+
+            function refreshTable() {
+                let tbody = document.getElementById('tablebody')
+                tbody.innerHTML = ""
+
+                if (todolist.length <= 0) {
+                    tbody.innerHTML = "<h1>Todonya Kosong</h1>"
+                }
+
+                for (let i = 0; i < todolist.length; i++) {
+                    // create row
+                    let tr = document.createElement('tr')
+                    // index
+                    let td = document.createElement('td')
+                    let text = document.createTextNode(i + 1)
+                    td.appendChild(text)
+                    tr.appendChild(td)
+                    // todo
+                    td = document.createElement('td')
+                    text = document.createTextNode(todolist[i])
+                    td.appendChild(text)
+                    tr.appendChild(td)
+                    // actionbutton
+                    td = document.createElement('td')
+                    let button = document.createElement('button')
+                    button.innerHTML = "Delete"
+                    button.className = "btn btn-danger"
+                    button.onclick = function () {
+                        removeDocument(i)
+                    }
+                    td.appendChild(button)
+                    tr.appendChild(td)
+                    // append row to tbody
+                    tbody.appendChild(tr)
+                }
+            }
+
+            function saveToLocalStorate(todos) {
+                localStorage.setItem('todovanilla', JSON.stringify(todos));
+            }
+
+            function loadFromLocalStorage() {
+                console.log(localStorage.getItem('todovanilla'))
+                return JSON.parse(localStorage.getItem('todovanilla'));
+            }
+        </script>
+</body>
+
+</html>
